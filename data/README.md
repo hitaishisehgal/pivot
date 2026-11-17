@@ -1,0 +1,5 @@
+# Dataset provenance
+
+PIVOT uses the UCI Student Performance dataset, dataset ID 320, Portuguese-language course file `student-por.csv`, source: https://archive.ics.uci.edu/dataset/320/student+performance. The file was already present at `data/student/student-por.csv` when work began and was copied byte-for-byte to `data/raw/student-por.csv` on 2026-11-17. It has 649 rows, 33 columns and no generated records. The separator is semicolon. The target is G3; G1/G2 are prior-period grades. The adjacent `student.txt` describes the fields. `src/data/ingestion.py` validates the schema, row count and grade range.
+
+The source dataset was collected in two Portuguese secondary schools. It is a small observational sample; performance and relationships may not generalize to other populations or current cohorts. Feature documentation is in `data/student/student.txt`.
