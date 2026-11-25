@@ -30,6 +30,12 @@ python -c "from src.data.ingestion import load_dataset; print(load_dataset().sha
 ```powershell
 python -m src.training.train
 python -m src.training.train --ablation
+python -m src.training.single_task_ablation
+python -m src.training.feature_groups
+python -m src.training.feature_selection
+python -m src.data.eda
+python -m src.evaluation.fairness_report
+python -m src.explainability.interactions
 ```
 
 The first command trains separate Random Forest regression/classification baselines and separate multi-task DNNs for both modes. The optional ablation command trains the specified hidden widths/dropout variants. Models and preprocessors go under `artifacts/versions`; measured results are written to `reports/experiments/training_results.json`. Development cross-validation is stratified by G3 category. The 20% test split is held out from fitting and scored after model fit. Re-run only when intentionally replacing artifacts/results.
@@ -42,7 +48,7 @@ Start API:
 uvicorn api.main:app --reload
 ```
 
-Open API documentation at `http://127.0.0.1:8000/docs`. Start the six-page app in another shell:
+Open API documentation at `http://127.0.0.1:8000/docs`. Profile endpoints include `POST/GET /students`, `GET /students/{student_id}`, and `GET /students/{student_id}/history`. Start the six-page app in another shell:
 
 ```powershell
 streamlit run app/streamlit_app.py
@@ -57,8 +63,7 @@ Copy `.env.example` to `.env`, fill in an Atlas URI and database name, and load 
 MLflow uses local SQLite metadata and local artifacts:
 
 ```powershell
-$env:MLFLOW_TRACKING_URI = "sqlite:///mlflow.db"
-mlflow ui
+mlflow ui --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlartifacts
 ```
 
 ## Tests and checks
@@ -68,7 +73,7 @@ python -m compileall -q src api app
 pytest -q
 ```
 
-The Atlas test uses a separate `pivot_test` database and one temporary marker record:
+The Atlas integration checks use a separate `pivot_test` database, create temporary test-only records, verify profile/history reads, and clean them up:
 
 ```powershell
 $env:PIVOT_RUN_MONGO_TESTS = "1"
@@ -79,6 +84,7 @@ GitHub Actions installs Python 3.13.7 dependencies and runs import compilation/t
 
 ## Repository map
 
+- `notebooks`: four reproducible data, feature, model and research review notebooks
 - `src/data`: ingestion, schema validation and stratified split
 - `src/preprocessing`: feature contracts and fold-fitted transformers
 - `src/models`, `src/training`: multi-task Keras network and training entry point
@@ -89,3 +95,4 @@ GitHub Actions installs Python 3.13.7 dependencies and runs import compilation/t
 - `reports/model_card.md`: intended use, limitations and ethical considerations
 
 See [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md) for verified completion and remaining gaps. Dataset acquisition and run results must not be represented as completed unless backed by the files and commands recorded there.
+The leakage checks are documented in [reports/leakage_audit.md](reports/leakage_audit.md), and measured limitations/results are in [reports/model_card.md](reports/model_card.md).

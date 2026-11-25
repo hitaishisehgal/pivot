@@ -1,0 +1,27 @@
+# Validated target: CPython 3.13.7 (pin minor lines; install in .venv).
+pandas==2.3.3
+numpy==2.2.6
+scipy==1.15.3
+scikit-learn==1.7.2
+tensorflow==2.20.0
+ml-dtypes==0.5.4
+h5py==3.12.1
+fastapi==0.121.0
+anyio==4.14.0
+uvicorn[standard]==0.38.0
+pydantic==2.12.3
+pymongo==4.15.3
+streamlit==1.51.0
+pyarrow==21.0.0
+plotly==6.4.0
+matplotlib==3.10.7
+seaborn==0.13.2
+shap==0.50.0
+lime==0.2.0.1
+mlflow==3.5.1
+SQLAlchemy==1.4.54
+alembic==1.13.3
+python-dotenv==1.2.1
+joblib==1.5.2
+pytest==8.4.2
+httpx==0.28.1
